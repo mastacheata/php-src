@@ -1113,6 +1113,7 @@ static void create_certinfo(struct curl_certinfo *ci, zval *listcode)
 static void _php_curl_set_default_options(php_curl *ch)
 {
 	char *cainfo;
+	char *capath;
 
 	curl_easy_setopt(ch->cp, CURLOPT_NOPROGRESS,        1);
 	curl_easy_setopt(ch->cp, CURLOPT_VERBOSE,           0);
@@ -1135,6 +1136,11 @@ static void _php_curl_set_default_options(php_curl *ch)
 	}
 	if (cainfo && cainfo[0] != '\0') {
 		curl_easy_setopt(ch->cp, CURLOPT_CAINFO, cainfo);
+	}
+
+	capath = INI_STR("openssl.cafile");
+	if (capath && capath[0] != '\0') {
+		curl_easy_setopt(ch->cp, CURLOPT_CAPATH, capath);
 	}
 
 #ifdef ZTS
